@@ -1,0 +1,212 @@
+{
+  "kind": "KubeSchedulerConfiguration",
+  "apiVersion": "kubescheduler.config.k8s.io/v1beta2",
+  "parallelism": 16,
+  "leaderElection": {
+    "leaderElect": true,
+    "leaseDuration": "15s",
+    "renewDeadline": "10s",
+    "retryPeriod": "2s",
+    "resourceLock": "leases",
+    "resourceName": "kube-scheduler",
+    "resourceNamespace": "kube-system"
+  },
+  "clientConnection": {
+    "kubeconfig": "",
+    "acceptContentTypes": "",
+    "contentType": "application/vnd.kubernetes.protobuf",
+    "qps": 50,
+    "burst": 100
+  },
+  "healthzBindAddress": "0.0.0.0:10251",
+  "metricsBindAddress": "0.0.0.0:10251",
+  "enableProfiling": true,
+  "enableContentionProfiling": true,
+  "percentageOfNodesToScore": 0,
+  "podInitialBackoffSeconds": 1,
+  "podMaxBackoffSeconds": 10,
+  "profiles": [
+    {
+      "schedulerName": "default-scheduler",
+      "plugins": {
+        "queueSort": {
+          "enabled": [
+            {
+              "name": "PrioritySort"
+            }
+          ]
+        },
+        "preFilter": {
+          "enabled": [
+            {
+              "name": "NodeResourcesFit"
+            },
+            {
+              "name": "NodePorts"
+            },
+            {
+              "name": "VolumeRestrictions"
+            },
+            {
+              "name": "PodTopologySpread"
+            },
+            {
+              "name": "InterPodAffinity"
+            },
+            {
+              "name": "VolumeBinding"
+            },
+            {
+              "name": "NodeAffinity"
+            }
+          ]
+        },
+        "filter": {
+          "enabled": [
+            {
+              "name": "NodeUnschedulableWrapped"
+            },
+            {
+              "name": "NodeNameWrapped"
+            },
+            {
+              "name": "TaintTolerationWrapped"
+            },
+            {
+              "name": "NodeAffinityWrapped"
+            },
+            {
+              "name": "NodePortsWrapped"
+            },
+            {
+              "name": "NodeResourcesFitWrapped"
+            },
+            {
+              "name": "VolumeRestrictionsWrapped"
+            },
+            {
+              "name": "EBSLimitsWrapped"
+            },
+            {
+              "name": "GCEPDLimitsWrapped"
+            },
+            {
+              "name": "NodeVolumeLimitsWrapped"
+            },
+            {
+              "name": "AzureDiskLimitsWrapped"
+            },
+            {
+              "name": "VolumeBindingWrapped"
+            },
+            {
+              "name": "VolumeZoneWrapped"
+            },
+            {
+              "name": "PodTopologySpreadWrapped"
+            },
+            {
+              "name": "InterPodAffinityWrapped"
+            }
+          ]
+        },
+        "postFilter": {
+          "enabled": [
+            {
+              "name": "DefaultPreemption"
+            }
+          ]
+        },
+        "preScore": {
+          "enabled": [
+            {
+              "name": "InterPodAffinity"
+            },
+            {
+              "name": "PodTopologySpread"
+            },
+            {
+              "name": "TaintToleration"
+            },
+            {
+              "name": "NodeAffinity"
+            }
+          ]
+        },
+        "score": {
+          "enabled": [
+            {
+              "name": "NodeResourcesFit",
+              "weight": 1
+            }
+          ]
+        },
+        "reserve": {
+          "enabled": [
+            {
+              "name": "VolumeBinding"
+            }
+          ]
+        },
+        "permit": {},
+        "preBind": {
+          "enabled": [
+            {
+              "name": "VolumeBinding"
+            }
+          ]
+        },
+        "bind": {
+          "enabled": [
+            {
+              "name": "DefaultBinder"
+            }
+          ]
+        },
+        "postBind": {}
+      },
+      "pluginConfig": [
+        {
+          "name": "NodeResourcesFit",
+          "args": {
+            "kind": "NodeResourcesFitArgs",
+            "apiVersion": "kubescheduler.config.k8s.io/v1beta2",
+            "scoringStrategy": {
+              "type": "LeastAllocated",
+              "resources": [
+                {
+                  "name": "cpu",
+                  "weight": 100
+                },
+                {
+                  "name": "memory",
+                  "weight": 1
+                }
+              ]
+            }
+          }
+        },
+        {
+          "name": "NodeResourcesFitWrapped",
+          "args": {
+            "kind": "NodeResourcesFitArgs",
+            "apiVersion": "kubescheduler.config.k8s.io/v1beta2",
+            "scoringStrategy": {
+              "type": "LeastAllocated",
+              "resources": [
+                {
+                  "name": "cpu",
+                  "weight": 100
+                },
+                {
+                  "name": "memory",
+                  "weight": 1
+                }
+              ]
+            }
+          }
+        }
+      ]
+    }
+  ]
+}
